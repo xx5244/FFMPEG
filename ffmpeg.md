@@ -75,6 +75,9 @@
     ```
   + ### 上字幕
   + ### 字幕檔轉換
+    ```
+    ffmpeg -i file_subtitle output_subtitle
+    ```
   + ### 畫面旋轉
   + ### 播放速度調整
   + ### 指定位置放圖
