@@ -41,14 +41,15 @@
 + ## 常用功能
   + ### 影片轉檔
     用`-i`放入欲轉檔的檔案，後面接著放欲輸出的檔案
+    輸入與輸出檔案最好都用`"`給包住
     ```
-    ffmpeg -i input_video output_video
+    ffmpeg -i "input_video" "output_video"
     ```
   
   + ### 影片快速合併
     用`-f concat -safe 0 -i`放入統整欲合併檔名的`txt`檔`-c copy`再放入欲輸出的檔案
     ```
-    ffmpeg -f concat -safe 0 -i file_list.txt -c copy output_video
+    ffmpeg -f concat -safe 0 -i "file_list.txt" -c copy "output_video"
     ```
     PS:
     `-f concat`設定輸出格式為合併
@@ -58,7 +59,7 @@
 
   + ### 影片剪輯
     ```
-    ffmpeg -i file_name -ss start_time -t time_length -c copy output_video
+    ffmpeg -i "file_name" -ss start_time -t time_length -c copy "output_video"
     ```
     PS:
     `-ss` 設定剪輯影片的起始時間，若為一開始則不用設定
@@ -67,24 +68,52 @@
   
   + ### 擷取視訊
     ```
-    ffmpeg -i file_name -an -c copy output_video
+    ffmpeg -i "file_name" -an -c copy "output_video"
     ```
+    PS:
+    `-an` 取消音訊輸出
+
   + ### 擷取音訊
     ```
-    ffmpeg -i file_name -vn -c copy output_audio
+    ffmpeg -i "file_name" -vn -c copy "output_audio"
     ```
+    PS:
+    `-vn` 取消視訊輸出
+
   + ### 上字幕
+    ```
+    ffmpeg -i "file_name" -vf "subtitiles=file_subtitle" "output_video"
+    ```
+    PS:
+    `-vf` 設定視訊過濾器
+    `subtitles` 屬於固定字樣的參數
+
   + ### 字幕檔轉換
     ```
-    ffmpeg -i file_subtitle output_subtitle
+    ffmpeg -i "file_subtitle" "output_subtitle"
     ```
   + ### 畫面旋轉
-  + ### 播放速度調整
+  
+  
+
++ ## 進階功能
+  + ### 字幕設定
+    + #### mkv檔加上字幕可以不用過濾器也不用重新編碼
+      ```
+      ffmpeg -i "file_name" -i "file_subtitle" -c copy "output_video"
+      ```
+      PS:
+      輸入與輸出的檔案一定要是MKV才可以不用視訊過濾器及重新編碼
+      
+  + ### 播放速度調整 
   + ### 指定位置放圖
-
 + ## 參考資料
-    ```
-    [ffmpeg](https://ffmpeg.org/)
+  ```
+  [ffmpeg](https://ffmpeg.org/)
 
-    [wiki](https://zh.wikipedia.org/wiki/FFmpeg)
-    ```
+  [wiki](https://zh.wikipedia.org/wiki/FFmpeg)
+  ```
++ ## 補充資料
+  ```
+  [FFmpeg操作參數](https://zhuanlan.zhihu.com/p/145312133)
+  ```
