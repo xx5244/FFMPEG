@@ -42,13 +42,15 @@
   + ### 影片轉檔
     用`-i`放入欲轉檔的檔案，後面接著放欲輸出的檔案
     ```
-    ffmpeg -i input_video output_video
+    ffmpeg -i "input_video" "output_video"
     ```
-  
+    PS:
+    輸入與輸出文件最好都已`"`包著
+
   + ### 影片快速合併
     用`-f concat -safe 0 -i`放入統整欲合併檔名的`txt`檔`-c copy`再放入欲輸出的檔案
     ```
-    ffmpeg -f concat -safe 0 -i file_list.txt -c copy output_video
+    ffmpeg -f concat -safe 0 -i "file_list.txt" -c copy "output_video"
     ```
     PS:
     `-f concat`設定輸出格式為合併
@@ -58,7 +60,7 @@
 
   + ### 影片剪輯
     ```
-    ffmpeg -i file_name -ss start_time -t time_length -c copy output_video
+    ffmpeg -i "file_name" -ss start_time -t time_length -c copy "output_video"
     ```
     PS:
     `-ss` 設定剪輯影片的起始時間，若為一開始則不用設定
@@ -67,16 +69,16 @@
   
   + ### 擷取視訊
     ```
-    ffmpeg -i file_name -an -c copy output_video
+    ffmpeg -i "file_name" -an -c copy "output_video"
     ```
   + ### 擷取音訊
     ```
-    ffmpeg -i file_name -vn -c copy output_audio
+    ffmpeg -i "file_name" -vn -c copy "output_audio"
     ```
   + ### 上字幕
   + ### 字幕檔轉換
     ```
-    ffmpeg -i file_subtitle output_subtitle
+    ffmpeg -i "file_subtitle" "output_subtitle"
     ```
   + ### 畫面旋轉
   + ### 播放速度調整
