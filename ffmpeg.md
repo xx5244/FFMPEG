@@ -45,7 +45,9 @@
     ```
     ffmpeg -i "input_video" "output_video"
     ```
-  
+    PS:
+    輸入與輸出文件最好都已`"`包著
+
   + ### 影片快速合併
     用`-f concat -safe 0 -i`放入統整欲合併檔名的`txt`檔`-c copy`再放入欲輸出的檔案
     ```
