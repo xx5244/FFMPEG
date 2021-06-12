@@ -41,15 +41,15 @@
     | -vol             | 設定音量大小，256為標準音量                                        |
 
   + ### 字幕參數
-    |參數指令|參數功能|
-    |:-|:-|
-    |-s size|設定Frame的大小(WxH)|
-    |-sn|禁止字幕|
-    |-scodec codec|設定字幕的編解碼器|
-    |-stag fourcc/tag|設定字幕tag|
-    |-fix_sub_duration|fix subtitles duration|
-    |-canvas_size size|設定Canvas的大小(WxH)|
-    |-spre preset|設定字幕選項的預設值(預設處理集)|
+    | 參數指令          | 參數功能                         |
+    | :---------------- | :------------------------------- |
+    | -s size           | 設定Frame的大小(WxH)             |
+    | -sn               | 禁止字幕                         |
+    | -scodec codec     | 設定字幕的編解碼器               |
+    | -stag fourcc/tag  | 設定字幕tag                      |
+    | -fix_sub_duration | fix subtitles duration           |
+    | -canvas_size size | 設定Canvas的大小(WxH)            |
+    | -spre preset      | 設定字幕選項的預設值(預設處理集) |
 
 + ## 常用功能
   + ### 影片轉檔
@@ -107,11 +107,35 @@
     ```
     ffmpeg -i "file_subtitle" "output_subtitle"
     ```
-  + ### 畫面旋轉
-  
-  
+  + ### 畫面翻轉/旋轉
+    + #### 水平翻轉
+      ```
+      ffmpeg -i "file_name" -vf "hflip" "output_video"
+      ```
+      PS:
+      `hflip` 為video filter的一個參數
 
-+ ## 進階功能
+    + #### 垂直翻轉
+      ```
+      ffmpeg -i "file_name" -vf "vflip" "output_video"
+      ```
+      PS:
+      `vflip` 為video filter的一個參數
+    
+    + #### 旋轉(90度的倍數)
+      ```
+      ffmpeg -i "file_name" -vf "transpose=number, transpose=number, ..." "output_video"
+      ```
+      PS:
+      `transpose` 為video filter的一個參數
+      `number`的對照如下
+      `0` = 逆時針旋轉90度並垂直翻轉
+      `1` = 順時針旋轉90度
+      `2` = 逆時針旋轉90度
+      `3` = 順時針旋轉90度並垂直翻轉
+      如要旋轉90的倍數即如上面範例下達多次參數指令並用`逗號`隔開
+
++ ## 進階知識
   + ### 字幕設定
     + #### mkv檔加上字幕可以不用過濾器也不用重新編碼
       ```
@@ -119,7 +143,18 @@
       ```
       PS:
       輸入與輸出的檔案一定要是MKV才可以不用視訊過濾器及重新編碼
+  
+  + ### 旋轉(指定角度)
+      ```
+      ffmpeg -i "file_name" -vf "rotate=PI/number" "output_video"
+      ```
+      PS:
+      `rotate` 為video filter的一個參數，且為順時針旋轉
+      `PI` 是固定的，任意的角度都是用PI的比例來表示
+      `number`自己輸入的數字，即為與PI的比例
       
+      **注意:直接用此方法旋轉，長寬是會跟原來的影片一樣的，同樣是旋轉90度，如原影片不是正方形就會有黑邊，用transpose旋轉就不會有**
+
   + ### 播放速度調整 
   + ### 指定位置放圖
 + ## 參考資料
