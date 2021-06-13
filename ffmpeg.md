@@ -145,6 +145,7 @@
       輸入與輸出的檔案一定要是MKV才可以不用視訊過濾器及重新編碼
   
   + ### 旋轉(指定角度)
+    + #### 一般使用
       ```
       ffmpeg -i "file_name" -vf "rotate=PI/number" "output_video"
       ```
@@ -153,9 +154,50 @@
       `PI` 是固定的，任意的角度都是用PI的比例來表示
       `number`自己輸入的數字，即為與PI的比例
       
-      **注意:直接用此方法旋轉，長寬是會跟原來的影片一樣的，同樣是旋轉90度，如原影片不是正方形就會有黑邊，用transpose旋轉就不會有**
+      **注意:直接用此方法旋轉，長寬是會跟原來的影片一樣的，同樣是旋轉90度，如原影片不是正方形就會有部分影像被裁切掉，不夠的部分也會有黑邊，用transpose旋轉就不會有**
 
-  + ### 播放速度調整 
+    + #### 設定寬高
+      ```
+      ffmpeg -i "file_name" -vf "rotate=PI/number:ow=number1:oh=number2" "output_video"
+      ```
+      PS:
+      `ow` 為輸出影像的寬，可輸入數字來設定，導入要用`:`
+      `oh` 為輸出影像的高，可輸入數字來設定，導入要用`:`
+      `number1、number2` 為自行設定的數字
+      `iw` 為輸入影像的寬，一般是拿來做為輸出影像比例之用
+      `ih` 為輸入影像的高，一般是拿來做為輸出影像比例之用
+
+
+  + ### 播放速度調整
+    + #### 音訊速度調整
+      ```
+      ffmpeg -i "file_name" -af "atempo=number" "output_video"
+      ```
+      PS:
+      `af` 為audio filter，音訊過濾器
+      `atempo` 為audio filter的一個參數，主要影響音訊的播放速度的
+      `number` 為原播放速度的幾倍速播放
+
+      **注意:**
+      **1. number必須在[0.5, 100.0]範圍內**
+      **2. 若number大於2，取樣的時候會跳過一些samples，因此，number大於2又想穩定品質就只好利用"daisy-chain"**
+      **3. daisy-chain範例**
+        ```
+        atempo=sqrt(3),atempo=sqrt(3)
+        ```
+    + #### 視訊速度調整
+      ```
+      ffmpeg -i "file_name" -vf "setpts=number*PTS" "output_video"
+      ``` 
+      PS:
+      `setpts` 為video filter的一個參數，主要是設定pts的
+      `number` 為調整pts的數字
+      `PTS` 為時間戳(presentation timestamp)
+      例如:原本於時間第1秒的影像，想要它出現在時間第0.5秒的話，那就等同時間戳*0.5，也就是說整體會變成影片2倍速播放的效果
+      
+      **注意:**
+      **影片播放太快的話一樣會有掉影格(frame)的問題，因此，可利用-r參數來設定輸出的fps**
+
   + ### 指定位置放圖
 + ## 參考資料
   ```
