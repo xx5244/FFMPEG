@@ -3,7 +3,30 @@
 + ## 介紹
     全名是Fast Forward MPEG(Moving Picture Experts Group)，為開源的影音多媒體處理框架，可以進行影音的解碼、編碼、編碼轉換、混合、抽取、串流和濾鏡，無論影音格式是從哪個地方出來的，從過去到現在的影音格式它幾乎都能夠支援，也可以拿來下載m3u8的影片
 
++ ## 語法
+  ```
+  ffmpeg [global_options] {[input_file_options] -i input_file} ... {[output_file_options] output_file} ...
+  ffmepg [全域參數的設定] {[輸入文件參數設定] -i 輸入的文件/輸入的網址} {[輸出文件參數設定] 輸出的文件/輸出的網址}
+  ```
+
 + ## 參數
+  + ### 全域參數
+    | 參數指令                    | 參數功能                   |
+    | :-------------------------- | :------------------------- |
+    | -loglevel                   | 設定日誌紀錄級別           |
+    | -v                          | 設定日誌紀錄級別           |
+    | -report                     | 生成報告                   |
+    | -max_alloc                  | 設定一個已分配區塊的最大值 |
+    | -y                          | 覆蓋輸出文件               |
+    | -n                          | 不覆蓋輸出文件             |
+    | -ignore_unknown             | 忽略未知的stream types     |
+    | -filter_threads             | 非複雜濾波器線程的數量     |
+    | -filter_complex_threads     | -filter_complex的線程數量  |
+    | -stats                      | 在編碼期間內print進度報告  |
+    | -max_error_rate             | 設定錯誤率多少以上報錯     |
+    | -bits_per_raw_sample number | 設定每個原始樣本的位數     |
+    | -vol volume                 | 改變音量                   |
+
   + ### 主要參數
     | 參數指令   | 參數功能                           |
     | :--------- | :--------------------------------- |
@@ -249,7 +272,7 @@
     `number_w` 為設定要去除的範圍寬度
     `number_h` 為設定要去除的範圍高度
     `show` 為設定是否顯示去除範圍的邊界，若為1則會顯示綠框邊界，可視化去除的範圍，預設為0
-    
+
     **注意:number_x與number_y不要為0，不然會很容易發生錯誤=>Logo area is outside of the frame的情況**
 
 + ## 參考資料
