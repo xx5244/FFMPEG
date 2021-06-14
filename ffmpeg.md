@@ -61,6 +61,15 @@
     PS:
     輸入與輸出文件最好都已`"`包著
 
+  + ### 改變影片大小
+    ```
+    ffmpeg -i "input_video" -s "WxH" "output_video"
+    ```
+    PS:
+    `-s` 調整影片的寬高參數
+    `W` 影片的寬
+    `H` 影片的高
+
   + ### 影片快速合併
     用`-f concat -safe 0 -i`放入統整欲合併檔名的`txt`檔`-c copy`再放入欲輸出的檔案
     ```
@@ -74,30 +83,32 @@
 
   + ### 影片剪輯
     ```
-    ffmpeg -i "file_name" -ss start_time -t time_length -c copy "output_video"
+    ffmpeg -i "input_video" -ss "start_time" -t "time_length" -c copy "output_video"
     ```
     PS:
     `-ss` 設定剪輯影片的起始時間，若為一開始則不用設定
+    `start_time` 輸入影片幾秒開始剪
     `-t`  設定剪輯影片的時間長度
+    `time_length` 影片的時間長度
     `-c copy` 免重新編碼
   
   + ### 擷取視訊
     ```
-    ffmpeg -i "file_name" -an -c copy "output_video"
+    ffmpeg -i "input_video" -an -c copy "output_video"
     ```
     PS:
     `-an` 取消音訊輸出
 
   + ### 擷取音訊
     ```
-    ffmpeg -i "file_name" -vn -c copy "output_audio"
+    ffmpeg -i "input_video" -vn -c copy "output_audio"
     ```
     PS:
     `-vn` 取消視訊輸出
 
   + ### 上字幕
     ```
-    ffmpeg -i "file_name" -vf "subtitiles=file_subtitle" "output_video"
+    ffmpeg -i "input_video" -vf "subtitiles=file_subtitle" "output_video"
     ```
     PS:
     `-vf` 設定視訊過濾器
@@ -110,21 +121,21 @@
   + ### 畫面翻轉/旋轉
     + #### 水平翻轉
       ```
-      ffmpeg -i "file_name" -vf "hflip" "output_video"
+      ffmpeg -i "input_video" -vf "hflip" "output_video"
       ```
       PS:
       `hflip` 為video filter的一個參數
 
     + #### 垂直翻轉
       ```
-      ffmpeg -i "file_name" -vf "vflip" "output_video"
+      ffmpeg -i "input_video" -vf "vflip" "output_video"
       ```
       PS:
       `vflip` 為video filter的一個參數
     
     + #### 旋轉(90度的倍數)
       ```
-      ffmpeg -i "file_name" -vf "transpose=number, transpose=number, ..." "output_video"
+      ffmpeg -i "input_video" -vf "transpose=number, transpose=number, ..." "output_video"
       ```
       PS:
       `transpose` 為video filter的一個參數
@@ -139,7 +150,7 @@
   + ### 字幕設定
     + #### mkv檔加上字幕可以不用過濾器也不用重新編碼
       ```
-      ffmpeg -i "file_name" -i "file_subtitle" -c copy "output_video"
+      ffmpeg -i "input_video" -i "file_subtitle" -c copy "output_video"
       ```
       PS:
       輸入與輸出的檔案一定要是MKV才可以不用視訊過濾器及重新編碼
@@ -147,7 +158,7 @@
   + ### 旋轉(指定角度)
     + #### 一般使用
       ```
-      ffmpeg -i "file_name" -vf "rotate=PI/number" "output_video"
+      ffmpeg -i "input_video" -vf "rotate=PI/number" "output_video"
       ```
       PS:
       `rotate` 為video filter的一個參數，且為順時針旋轉
@@ -158,7 +169,7 @@
 
     + #### 設定寬高
       ```
-      ffmpeg -i "file_name" -vf "rotate=PI/number:ow=number1:oh=number2" "output_video"
+      ffmpeg -i "input_video" -vf "rotate=PI/number:ow=number1:oh=number2" "output_video"
       ```
       PS:
       `ow` 為輸出影像的寬，可輸入數字來設定，導入要用`:`
@@ -171,7 +182,7 @@
   + ### 播放速度調整
     + #### 音訊速度調整
       ```
-      ffmpeg -i "file_name" -af "atempo=number" "output_video"
+      ffmpeg -i "input_video" -af "atempo=number" "output_video"
       ```
       PS:
       `af` 為audio filter，音訊過濾器
@@ -187,7 +198,7 @@
         ```
     + #### 視訊速度調整
       ```
-      ffmpeg -i "file_name" -vf "setpts=number*PTS" "output_video"
+      ffmpeg -i "input_video" -vf "setpts=number*PTS" "output_video"
       ``` 
       PS:
       `setpts` 為video filter的一個參數，主要是設定pts的
@@ -198,7 +209,18 @@
       **注意:**
       **影片播放太快的話一樣會有掉影格(frame)的問題，因此，可利用-r參數來設定輸出的fps**
 
-  + ### 指定位置放圖
+  + ### 指定位置放圖(浮水印)
+    + #### 圖放左上角
+    ```
+    ffmpeg -i "input_video" -i "input_image" -filter_complex "overlay=X:Y" "output_video"
+    ```
+    PS:
+    `-filter_complex` 為混合用的過濾器，通常是用來混合兩種不同的視訊/音訊
+    `overlay` 為filter的一個參數，主要是設定混合的位置
+    `X` 為混合的位置之X座標值
+    `Y` 為混合的位置之Y座標值
+    **概念上是把輸入的視訊跟輸入的圖片混合在一起**
+
 + ## 參考資料
   ```
   [ffmpeg](https://ffmpeg.org/)
