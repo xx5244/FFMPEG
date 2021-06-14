@@ -220,6 +220,37 @@
     `X` 為混合的位置之X座標值
     `Y` 為混合的位置之Y座標值
     **概念上是把輸入的視訊跟輸入的圖片混合在一起**
+    
+    + #### 圖放正中央
+      ```
+      ffmpeg -i "input_video" -i "input_image" -filter_complex "overlay=(W-w)/2:(H-w)/2" "output_video"
+      ```
+      PS:
+      `W` 為第一個輸入源的寬，亦即影片的寬
+      `H` 為第一個輸入源的高，亦即影片的高
+      `w` 為第二個輸入源的寬，亦即圖片的寬
+      `h` 為第二個輸入源的高，亦即圖片的高
+      **概念上是利用算是算出影片的中心點減去圖片的中心點，然後，把位置移到該點去**
+      **注意:寬、高的大小寫有差異，不可任意變換**
+
+    + #### 圖放右下角
+      ```
+      ffmpeg -i "input_video" -i "input_image" -filter_complex "overlay=W-w:H-h" "output.video"
+      ```
+  
+  + ### 去除浮水印
+    ```
+    ffmpeg -i "input_video" -vf "delogo=x=number_x:y=number_y:w=number_w:h=number_h:show=1" "output_video"
+    ```
+    PS:
+    `delogo` 為video filter中的一個參數，主要用來去除浮水印的
+    `number_x` 為設定要去除的x座標
+    `number_y` 為設定要去除的y座標
+    `number_w` 為設定要去除的範圍寬度
+    `number_h` 為設定要去除的範圍高度
+    `show` 為設定是否顯示去除範圍的邊界，若為1則會顯示綠框邊界，可視化去除的範圍，預設為0
+    
+    **注意:number_x與number_y不要為0，不然會很容易發生錯誤=>Logo area is outside of the frame的情況**
 
 + ## 參考資料
   ```
