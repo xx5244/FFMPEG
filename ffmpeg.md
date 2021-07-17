@@ -170,6 +170,21 @@
       如要旋轉90的倍數即如上面範例下達多次參數指令並用`逗號`隔開
 
 + ## 進階知識
+  + ### 下載m3u8網址
+    + #### 一般使用
+      ```
+      ffmpeg -i "m3u8_url" -c copy "output_video"
+      ```
+
+    + #### 增加headers
+      ```
+      ffmpeg heades -i "m3u8_url" -c copy "output_video"
+      ```
+      PS:
+      headers是指欲加入的標頭檔，常見的加入如下
+      1. -referer "referer_url"
+      2. -user_agent "user_agent_url"
+
   + ### 字幕設定
     + #### mkv檔加上字幕可以不用過濾器也不用重新編碼
       ```
