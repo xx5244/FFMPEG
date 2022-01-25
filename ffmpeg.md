@@ -185,6 +185,11 @@
       headers是指欲加入的標頭檔，常見的加入如下
       1. -referer "referer_url"
       2. -user_agent "user_agent_url"
+      注意:若是其餘的headers，請用-headers來添加，若是多項的話，用$'\r\n'來串接
+      """
+      ffmpeg -user_agent "value" -referer "value" -headers "origin: value" -i "m3u8檔" -c copy output.mp4
+      """
+
 
   + ### 字幕設定
     + #### mkv檔加上字幕可以不用過濾器也不用重新編碼
