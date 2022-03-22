@@ -84,6 +84,15 @@
     PS:
     輸入與輸出文件最好都已`"`包著
 
+  + ### 處理過程隱藏
+    由於下載m3u8的時候過程內容太過繁雜，因此，想將過程隱藏起來，就要設定日誌級別，可以設定error才顯示或者warning就顯示之類的
+    ```
+    ffmpeg -loglevel error -i "input_video" "output_video"
+    ```
+    PS:
+    `-loglevel` 設定日誌紀錄級別
+    `error` 有error才顯示
+
   + ### 改變影片大小
     ```
     ffmpeg -i "input_video" -s "WxH" "output_video"
