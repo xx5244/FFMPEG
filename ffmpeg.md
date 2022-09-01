@@ -87,11 +87,13 @@
   + ### 處理過程隱藏
     由於下載m3u8的時候過程內容太過繁雜，因此，想將過程隱藏起來，就要設定日誌級別，可以設定error才顯示或者warning就顯示之類的
     ```
-    ffmpeg -loglevel error -i "input_video" "output_video"
+    ffmpeg -loglevel loglevel -i "input_video" "output_video"
     ```
     PS:
     `-loglevel` 設定日誌紀錄級別
-    `error` 有error才顯示
+    **loglevel**
+    `error` 過程有error才顯示
+    `quiet` 過程都不顯示
 
   + ### 改變影片大小
     ```
@@ -125,7 +127,7 @@
     `time_length` 影片的時間長度
     `-c copy` 免重新編碼
   
-  + ### 擷取視訊
+  + ### 擷取影片
     ```
     ffmpeg -i "input_video" -an -c copy "output_video"
     ```
@@ -137,20 +139,56 @@
     ffmpeg -i "input_video" -vn -c copy "output_audio"
     ```
     PS:
-    `-vn` 取消視訊輸出
+    `-vn` 取消影片輸出
 
   + ### 上字幕
     ```
     ffmpeg -i "input_video" -vf "subtitiles=file_subtitle" "output_video"
     ```
     PS:
-    `-vf` 設定視訊過濾器
+    `-vf` 設定影片過濾器
     `subtitles` 屬於固定字樣的參數
 
   + ### 字幕檔轉換
     ```
     ffmpeg -i "file_subtitle" "output_subtitle"
     ```
+
+  + ### 設定bitrate
+    ```
+    ffmpeg -i "input_video" -b:v bitrate_num "output_video"
+    ```
+    PS:
+    `-b:v` 設定影片bitrate
+    `bitrate_num` 設定bitrate的值，若要5000K就打5000K
+
+  + ### 查詢bitrate
+    ```
+    ffprobe -loglevel quiet -i "input_video" -show_entries stream=bit_rate
+    ```
+    PS:
+    `-show_entries stream=bit_rate` 顯示bitrate
+    `-loglevel quiet` 不顯示過程
+    最後會出現兩個bit_rate，上面的為video的，下面的為audio的，單位皆為bps
+
+  + ### 設定fps
+    ```
+    ffmpeg -i "input_video" -r fps_num "output_video"
+    ```
+    PS:
+    `-r` 設定影片的fps
+    `fps_num` 設定fps的值，若要30就打30
+
+  + ### 查詢fps
+    ```
+    ffprobe -loglevel quiet -i "input_video" -show_entries stream=r_frame_rate -select_streams v -of default=noprint_wrappers=1:nokey=1
+    ```
+    PS:
+    `-show_entries stream=r_frame_rate` 顯示fps
+    最後會出現兩個r_frame_rate，上面的為video的，下面的為audio的
+    `select_streams v` 選擇顯示video的資料，若v改成a就是顯示audio的資料
+    `-of default=noprint_wrappers=1:nokey=1` 只顯示數值
+
   + ### 畫面翻轉/旋轉
     + #### 水平翻轉
       ```
@@ -206,7 +244,7 @@
       ffmpeg -i "input_video" -i "file_subtitle" -c copy "output_video"
       ```
       PS:
-      輸入與輸出的檔案一定要是MKV才可以不用視訊過濾器及重新編碼
+      輸入與輸出的檔案一定要是MKV才可以不用影片過濾器及重新編碼
   
   + ### 旋轉(指定角度)
     + #### 一般使用
@@ -249,7 +287,7 @@
         ```
         atempo=sqrt(3),atempo=sqrt(3)
         ```
-    + #### 視訊速度調整
+    + #### 影片速度調整
       ```
       ffmpeg -i "input_video" -vf "setpts=number*PTS" "output_video"
       ``` 
@@ -268,11 +306,11 @@
     ffmpeg -i "input_video" -i "input_image" -filter_complex "overlay=X:Y" "output_video"
     ```
     PS:
-    `-filter_complex` 為混合用的過濾器，通常是用來混合兩種不同的視訊/音訊
+    `-filter_complex` 為混合用的過濾器，通常是用來混合兩種不同的影片/音訊
     `overlay` 為filter的一個參數，主要是設定混合的位置
     `X` 為混合的位置之X座標值
     `Y` 為混合的位置之Y座標值
-    **概念上是把輸入的視訊跟輸入的圖片混合在一起**
+    **概念上是把輸入的影片跟輸入的圖片混合在一起**
     
     + #### 圖放正中央
       ```
