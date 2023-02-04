@@ -83,6 +83,13 @@
     ```
     PS:
     輸入與輸出文件最好都已`"`包著
+  
+  + ### 查看影片資訊
+    ```
+    ffmpeg -i "input_video"
+    ```
+    輸出資訊結果如下圖
+    ![](Image/影片資訊查看.png)
 
   + ### 處理過程隱藏
     由於下載m3u8的時候過程內容太過繁雜，因此，想將過程隱藏起來，就要設定日誌級別，可以設定error才顯示或者warning就顯示之類的
@@ -105,6 +112,17 @@
     `H` 影片的高
 
   + ### 影片快速合併
+    方法1.
+    ```
+    ffmpeg -i "input_video1" -i "input_video2" -i "input_video3" -filter_complex "[0:0][0:1][1:0][1:1][2:0][2:1]concat=n=video_num:v=1:a=1[out]" -map "[out]" "output_video"    
+    ```
+    PS:
+    `-filter_complex`用來連接影片的，後面[video_num:0][video_num:1]，看有幾個影片串幾個[video_num:0]跟[video_num:1]，前面的數字由0開始串到video_num-1的數量，至於：號面的0跟1是指video跟audio的
+    `concat`的參數是指定幾部影片合併，3部就填3，v=1:a=1是固定的，因為最終是合成為1部
+    `-map` 參數指定輸出格式為合併後的影片
+    所以，就是先把要輸入的影片一次輸入近來，再來就是設定幾個[:0][:1]，然後檔案印射出一個
+
+    方法2.
     用`-f concat -safe 0 -i`放入統整欲合併檔名的`txt`檔`-c copy`再放入欲輸出的檔案
     ```
     ffmpeg -f concat -safe 0 -i "file_list.txt" -c copy "output_video"
@@ -153,6 +171,24 @@
     ```
     ffmpeg -i "file_subtitle" "output_subtitle"
     ```
+
+  + ### 設定影片編碼
+    ```
+    ffmpeg -i "input_video" -c:v h264 -c:a aac -strict -2 "output_video"
+    ```
+    PS:
+    `-c:v h264`：指定影片編碼格式為h264。
+    `-c:a aac`：指定音訊編碼格式為aac。
+    `-strict -2`：使用嚴格的編碼選項，以避免轉碼過程中的錯誤。
+    強烈建議改編碼要設定bitrate，不然會不一樣喔
+  
+  + ### 設定影片編碼指定影片編碼規格
+    ```
+    ffmpeg -i "input_video" -c:v h264 -profile:v high "output_video"
+    ```
+    PS:
+    `-c:v h264`:指定影片編碼格式為h264。
+    `-profile:v high`:參數指定使用 H.264 High profile
 
   + ### 設定bitrate
     ```
@@ -344,6 +380,57 @@
     **注意:number_x與number_y不要為0，不然會很容易發生錯誤=>Logo area is outside of the frame的情況**
     **若要去掉多個浮水印，要用逗號來分隔，如同多重旋轉一樣**
     **因為通常這只是處理影像不對聲音做處理，所以中間可以插個不對音訊做處理的指令，`-c:a copy`**
+
+  + ### 用python使用ffmpeg
+    ```python
+    import subprocess
+
+    cmd = f'ffmpeg -i input_video'
+    result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = result.stderr.decode('utf-8')
+    print(output)
+
+    """
+    利用subprocess來執行
+    cmd: 要輸入的命令
+    stdout: 標準輸出
+    stderr: 標準錯誤輸出
+    當兩個通信管道都設定為subprocess.PIPE時，則意味著 Python 程式碼可以從子處理程序的標準輸出和標準錯誤輸出中讀取資料
+    這樣，在執行 subprocess.run 時，輸出資訊就可以通過 stdout 和 stderr 屬性讀取
+    在使用ffmpeg例子中，結果一定要使用stderr，才會看到跟cmd輸出結果一樣的，用stdout，正常情況都是不會看到訊息的
+    注意: python中路徑最好用/來弄
+    """    
+    ```
+  
+  + ### 使用gpu加速
+    + #### 目前僅介紹Nvidia顯卡的部份，需要下載３個東西，顯卡驅動、CUDA工具包、支援CUDA的ffmpeg
+    + #### Step1. 下載顯卡驅動並安裝
+      [這裡下載](https://www.nvidia.com/zh-tw/geforce/drivers/)
+      ![](Image/使用gpu加速_1.png)
+    + #### Step2. 下載CUDA工具包並安裝
+      [這裡下載](https://developer.nvidia.com/cuda-downloads)
+      ![](Image/使用gpu加速_2.png)
+    + #### Step3. 下載支援CUDA的ffmpeg並安裝，且環境路徑要指定
+      [這裡下載](https://www.gyan.dev/ffmpeg/builds/)
+      **下載Full的版本**
+      ![](Image/使用gpu加速_3.png)
+    + #### Step4. 編碼要指定有支援CUDA的編碼器
+      **執行以下指令即可查看有支援CUDA的編碼器資訊**
+      ```
+      ffmpeg -codecs | findstr cuvid
+      ```
+      **範例如下圖**
+      ![](Image/使用gpu加速_4.png)
+      **就看encoders的部份**
+    + #### Step5. 輸入ffmpeg指令使用gpu加速嚕
+      ```
+      ffmpeg -i "input_video" -c:v h264_nvenc "output_video"
+      ```
+    + #### Step6. 把GPU操到100%就是爽
+      ![](Image/使用gpu加速_5.png)
+
+
+
 
 + ## 參考資料
   ```
